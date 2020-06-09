@@ -1,94 +1,59 @@
-/*
-var json = $.getJSON("restaurant.json", function(json) {
-    console.log(json); // this will show the info it in firebug console
-}); 
-*/
-
-var json = 
-[
-   {
-      "restaurantName":"Bronco",
-      "address":"39 Rue des Petites Écuries, 75010 Paris",
-      "lat":48.8737815,
-      "long":2.3501649,
-      "ratings":[
-         {
-            "stars":4,
-            "comment":"Un excellent restaurant, j'y reviendrai ! Par contre il vaut mieux aimer la viande."
-         },
-         {
-            "stars":5,
-            "comment":"Tout simplement mon restaurant préféré !"
-         }
-      ]
-   },
-   {
-      "restaurantName":"Babalou",
-      "address":"4 Rue Lamarck, 75018 Paris",
-      "lat":48.8865035,
-      "long":2.3442197,
-      "ratings":[
-         {
-            "stars":5,
-            "comment":"Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
-         },
-         {
-            "stars":3,
-            "comment":"J'ai trouvé ça correct, sans plus"
-         }
-      ]
-   }
-];
-
 $(document).ready(function() { 
 
-
-  initRatings(0,5);
+  initRatings();
 
   $('#minStars').change(function() {
-    initRatings($(this).val(),$('#maxStars').val());
+    moyChange($(this).val(),$('#maxStars').val());
   });
 
   $('#maxStars').change(function() {
-    initRatings($('#minStars').val(),$(this).val());
+    moyChange($('#minStars').val(),$(this).val());
   });
 
 });
 
+function moyChange(minStars, maxStars) {
+  $('.restaurant').each(function(i, rest) {
+    if(rest.getAttribute('data-value') < minStars || rest.getAttribute('data-value') > maxStars){
+      $(this).hide();
+    }else{
+      $(this).show();
+    }
+  });
+}
 
-
-
-
-
-function initRatings(minStars, maxStars) {
+function initRatings() {
 
   $('#list').empty();
 
-  // Loop dans le Json
-  for(var i = 0; i < json.length; i++) {
-    var obj = json[i];
-    var moyStars = 0;
+  $.getJSON("restaurant.json", function(json) {
+    // Each restaurant
+    $.each(json, function(i, restaurant){
+      // Calcul moy restaurant
+      var moy = 0;
+      $.each(restaurant.ratings, function(e, ratings){
+        moy = moy + restaurant.ratings[e].stars;
+      });
+      moy = moy / restaurant.ratings.length;
 
-    // Loop Moy
-    for (e = 0; e < obj.ratings.length; e++) {
-      moyStars = moyStars + obj.ratings[e].stars;
-    }
-    moyStars = moyStars / obj.ratings.length;
+      // Ajout Restaurant
+      $('<div class="restaurant" data-value="'+ moy +'"> <p class="display-4">' + restaurant.restaurantName + '</p>' + '<p class="lead mb-4">' + restaurant.address + '</p></div>').appendTo('#list');
 
-      if(moyStars >= minStars && moyStars <= maxStars){
-        // Ajout du restaurant et de son adresse
-        $('<p class="h5">' + obj.restaurantName + '</p>' +
-          '<p>' + obj.address + '</p>').appendTo('#list');
-        // Ajout des ratings
-        for (e = 0; e < obj.ratings.length; e++) {
-        $('<p>' + obj.ratings[e].comment + '</p> <p class="h4">' + obj.ratings[e].stars + '/5</p>').appendTo('#list');
-        }
-      }
-    // Fin du restaurant
-    $('<hr>').appendTo('#list');
-  }
+      // Each ratings
+      $.each(restaurant.ratings, function(e, ratings){
+        // Ajout Rating
+
+        
+
+        $('<div class="restaurant mb-3" data-value="'+ moy +'"><h4>' + restaurant.ratings[e].stars + '/5  <small class="text-muted">' + restaurant.ratings[e].comment + '</small></h4></div>').appendTo('#list');
+        //$('<div class="restaurant" data-value="'+ moy +'"><p>' + restaurant.ratings[e].comment + '</p> <p class="h4">' + restaurant.ratings[e].stars + '/5</p></div>').appendTo('#list');
+      });
+      $('<hr>').appendTo('#list');
+    });
+  });
+
+  $('<hr>').appendTo('#list');
 }
-
 
 
 function initMap() {
@@ -109,10 +74,11 @@ function initMap() {
   });
 
   // Loop dans le Json
-  for(var i = 0; i < json.length; i++) {
-    var obj = json[i];
-    newMarker(new google.maps.LatLng(obj.lat,obj.long), obj.restaurantName);
-  }
+  $.getJSON("restaurant.json", function(json) {
+    $.each(json, function(i, restaurant){
+      newMarker(new google.maps.LatLng(restaurant.lat,restaurant.long), restaurant.restaurantName);
+    });
+  });
 
 }
 

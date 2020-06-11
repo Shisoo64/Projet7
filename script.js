@@ -12,6 +12,7 @@ $(document).ready(function() {
 
 });
 
+
 function moyChange(minStars, maxStars) {
   $('.restaurant').each(function(i, rest) {
     if(rest.getAttribute('data-value') < minStars || rest.getAttribute('data-value') > maxStars){
@@ -21,6 +22,7 @@ function moyChange(minStars, maxStars) {
     }
   });
 }
+
 
 function initRatings() {
 
@@ -35,23 +37,19 @@ function initRatings() {
         moy = moy + restaurant.ratings[e].stars;
       });
       moy = moy / restaurant.ratings.length;
-
       // Ajout Restaurant
       $('<div class="restaurant" data-value="'+ moy +'"> <p class="display-4">' + restaurant.restaurantName + '</p>' + '<p class="lead mb-4">' + restaurant.address + '</p></div>').appendTo('#list');
-
+      newMarker(new google.maps.LatLng(restaurant.lat,restaurant.long), restaurant.restaurantName);
       // Each ratings
       $.each(restaurant.ratings, function(e, ratings){
         // Ajout Rating
-
-        
-
         $('<div class="restaurant mb-3" data-value="'+ moy +'"><h4>' + restaurant.ratings[e].stars + '/5  <small class="text-muted">' + restaurant.ratings[e].comment + '</small></h4></div>').appendTo('#list');
-        //$('<div class="restaurant" data-value="'+ moy +'"><p>' + restaurant.ratings[e].comment + '</p> <p class="h4">' + restaurant.ratings[e].stars + '/5</p></div>').appendTo('#list');
       });
+      // Hr fin de restaurant
       $('<hr>').appendTo('#list');
     });
   });
-
+  // Hr fin de liste
   $('<hr>').appendTo('#list');
 }
 
@@ -59,7 +57,6 @@ function initRatings() {
 function initMap() {
 
   gMap = new google.maps.Map(document.getElementById('map'));
-
   navigator.geolocation.getCurrentPosition(function(position) {
     // Centrage sur la localisation de l'utilisateur
     var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -72,22 +69,14 @@ function initMap() {
     gMap.setZoom(12);
     newMarker(new google.maps.LatLng(48.858382, 2.294480), "Vous");
   });
-
-  // Loop dans le Json
-  $.getJSON("restaurant.json", function(json) {
-    $.each(json, function(i, restaurant){
-      newMarker(new google.maps.LatLng(restaurant.lat,restaurant.long), restaurant.restaurantName);
-    });
-  });
-
 }
 
 
 
 function newMarker(position, title) {
   var marker = new google.maps.Marker({
-      position: position,
-      map: gMap,
-      title: title
-    });
+    position: position,
+    map: gMap,
+    title: title
+  });
 }

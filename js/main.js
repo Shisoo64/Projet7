@@ -1,16 +1,13 @@
-$(document).ready(function() { 
+let map = new Mapy;
+let resto = new Resto;
 
-  let map = new Mapy;
-  let resto = new Resto;
+map.initMap();
+resto.initResto();
 
-  resto.initRatings();
+$('#minStars').change(function() {
+resto.moyChange($(this).val(),$('#maxStars').val());
+});
 
-  $('#minStars').change(function() {
-    resto.moyChange($(this).val(),$('#maxStars').val());
-  });
-
-  $('#maxStars').change(function() {
-    resto.moyChange($('#minStars').val(),$(this).val());
-  });
-
+$('#maxStars').change(function() {
+resto.moyChange($('#minStars').val(),$(this).val());
 });

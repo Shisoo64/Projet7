@@ -26,21 +26,17 @@ class Resto {
         });
         moy = moy / restaurant.ratings.length;
         // Ajout Restaurant
-        $('<div class="restaurant" data-value="'+ moy +'"> <p class="display-4">' + restaurant.restaurantName + '</p>' + '<p class="lead mb-4">' + restaurant.address + '</p></div>').appendTo('#list');
+        $('<a class="btn btn-primary btn-lg btn-block restaurant restaurantBtn" data-value="'+ moy +'" data-toggle="collapse" data-target="#collapse' + restaurant.restaurantName + '" role="button" aria-expanded="false" aria-controls="collapseExample">' + restaurant.restaurantName + '</a><p class="lead mb-4">' + restaurant.address + '</p>').appendTo('#list');
         map.newMarker(new google.maps.LatLng(restaurant.lat,restaurant.long), restaurant.restaurantName);
         // Each ratings
         $.each(restaurant.ratings, function(e, ratings){
           // Ajout Rating
-          $('<div class="restaurant mb-3" data-value="'+ moy +'"><h4>' + restaurant.ratings[e].stars + '/5  <small class="text-muted">' + restaurant.ratings[e].comment + '</small></h4></div>').appendTo('#list');
+          $('<div class="collapse restaurant mb-3" data-value="'+ moy+'" id="collapse' + restaurant.restaurantName + '"><div class="card card-body"><h4>' + restaurant.ratings[e].stars + '/5 <small class="text-muted">' + restaurant.ratings[e].comment + '</small></h4></div></div>').appendTo('#list');
         });
-        // Hr fin de restaurant
-        $('<hr>').appendTo('#list');
+        // append apres rating $('').appendTo('#list');
       });
     });
-    // Hr fin de liste
-    $('<hr>').appendTo('#list');
   }
-
 }
 
 

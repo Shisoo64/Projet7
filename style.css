@@ -8,5 +8,9 @@
 }
 
 .restaurantBtn:hover{
-	
+
+}
+
+.restaurant .card{
+	border-color: #007bff;
 }

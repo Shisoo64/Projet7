@@ -19,6 +19,9 @@ class Mapy {
       map.gMap.setZoom(12);
       map.newMarker(new google.maps.LatLng(48.858382, 2.294480), "Vous");
     });
+    map.gMap.addListener('click', function(e) {
+      map.createRestoAndMarker(e.latLng, map);
+    });
   }
 
   newMarker(position, title) {
@@ -27,6 +30,16 @@ class Mapy {
     map: this.gMap,
     title: title
   });
+  }
+
+  createRestoAndMarker(latLng, map) {
+    map.gMap.panTo(latLng);
+    $('#exampleModal').modal('show');
+    $("#modalOk").click(function() {
+      map.newMarker(latLng, map);
+      resto.createResto(latLng.lat(), latLng.lng(), 2.5, $("#modalAdresse").val(), $("#modalRestaurantName").val());
+      $('#exampleModal').modal('hide');
+    });
   }
 
 }

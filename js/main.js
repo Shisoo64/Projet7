@@ -32,6 +32,6 @@ $("#ratingsModalOk").click(function() {
 
 
       console.log("Truc");
-    $.getJSON("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=36.950030,14.537220&radius=500&type=restaurant&key=AIzaSyDoAgu5pb6ODIxcuiG-8Ls9AgMhaGBebRU&callback=?", function(data){
+    $.getJSON("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=36.950030,14.537220&radius=500&type=restaurant&key=AIzaSyDoAgu5pb6ODIxcuiG-8Ls9AgMhaGBebRU", function(data){
       console.log("Data: " + data);
     })
